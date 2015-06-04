@@ -1,0 +1,24 @@
+
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="/mycalendar_static/myCalendar.css">
+		
+		<!--<script src="/static/myCalendarController.js"></script>-->
+	</head>
+	<body class="unselectable">
+		<!--<a href="/week/">go to week view</a>-->
+		<div class="container" ng-app="myCalendarApp">
+			<h3 class="calendarTitle">My Calendar with django REST & angularJS</small></h3>
+			
+			{% block content %}
+			{% endblock %}
+			
+		</div>
+	<script src="/mycalendar_static/angular.js"></script>
+	<script src="/mycalendar_static/angular-resource.js"></script>
+	<script src="/mycalendar_static/myCalendarApp.js"></script>
+	<script src="/mycalendar_static/dateExtend.js"></script>
+	{% block js %}
+	{% endblock %}	
+	</body>
+</html>

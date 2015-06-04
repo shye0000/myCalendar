@@ -1,0 +1,210 @@
+{% extends 'base.html' %}
+{% block content %}
+		<div class="usr_area">
+			<div class="username">{{user.username}}</div>
+			<a href="logout" class="button logout div_inline">Logout</a>
+		</div>
+	
+	<div class="content" ng-controller="myYearController">
+		<div class="monthTitle yearTitle">{[{year}]}</div>
+		
+		<div id="year" class="" ng-hide="hide_year">
+			<div class="year_head">
+				Jump to: <input type="text" ng-model="year_str" size="2">
+				<button ng-click="jumpToYear(year_str);" class="button div_inline">Go</button>
+				<button ng-click="previousYear()" class="button pre div_inline">Previous</button>	
+				<button ng-click="nextYear()" class="button next div_inline">Next</button>
+				<button ng-click="hideTaskDetail();showNewTask();" class="button newTask div_inline">New Task</button>		
+			</div>
+			<div class="smallCalendar" ng-controller="myMonthController" ng-repeat="i in [1,12] | makeRange">
+				<div class="monthTitle div_inline smallTitle" ng-init="show(i,year)">{[{month}]} <img ng-click="hideYearShowMonth(i,year)" class='month_detail' src='/mycalendar_static/images/add139.png' /></div>
+				<ul class="calendar">
+					<li id="header">
+						<ul>
+							<li>Sunday</li>
+							<li>Monday</li>
+							<li>Tuesday</li>
+							<li>Wednesday</li>
+							<li>Thursday</li>
+							<li>Friday</li>
+							<li>Saturday</li>
+						</ul>
+					</li>
+					<li id="lastmonth">
+						<ul>
+							<li ng-repeat="i in [ndps,ndpe] | makeRange">{[{i}]}</li>	
+						</ul>
+					</li>
+					<li id="thismonth">
+						<ul>
+							<div ng-repeat="day in days">
+								<li ng-class="{today:day.today}" ng-click="showWeekHideYear(day.dateStart)" class="{[{day.type}]}">{[{day.dateStart.split("-")[2]|num}]}</li>
+							</div>
+						</ul>
+					</li>
+					<li id="nextmonth">
+						<ul>
+							<li ng-repeat="i in [1,ndn] | makeRange">{[{i}]}</li>
+						</ul>
+					</li>
+					<div class="clear"></div> 
+				</ul>
+			</div>
+		</div>
+		<div id ="month" ng-hide="hide_month" class="content month" ng-controller="oneMonthController" ng-init="hideYearShowMonth()">
+			<div class=" monthTitle div_inline">{[{month}]} <img ng-click="showYearHideMonth(year)" class='backToYear' src='/mycalendar_static/images/minus87.png' /></div>
+			<div class="month_head">
+				<button ng-click="previousMonth()" class="button pre_month div_inline">Previous</button>	
+				<button ng-click="nextMonth()" class="button next_month div_inline">Next</button>
+				<button ng-click="hideTaskDetail();showNewTask();" class="button newTask div_inline">New Task</button>
+			</div>
+			<ul class="calendar">
+				<li id="header">
+					<ul>
+						<li>Sunday</li>
+						<li>Monday</li>
+						<li>Tuesday</li>
+						<li>Wednesday</li>
+						<li>Thursday</li>
+						<li>Friday</li>
+						<li>Saturday</li>
+					</ul>
+				</li>
+				<li id="lastmonth">
+					<ul>
+						<li ng-repeat="i in [ndps,ndpe] | makeRange">{[{i}]}</li>	
+					</ul>
+				</li>
+				<li id="thismonth">
+					<ul>
+						<div ng-repeat="day in days">
+							<li ng-class="{today:day.today}" ng-click="showWeekHideMonth(day.dateStart)">{[{day.dateStart.split("-")[2]|num}]}
+								<p ng-style="task.style" class="taskTitle" ng-repeat="task in day.tasks">{[{task.taskTitle}]}</p>
+							</li>
+						</div>
+					</ul>
+				</li>
+				<li id="nextmonth">
+					<ul>
+						<li ng-repeat="i in [1,ndn] | makeRange">{[{i}]}</li>
+					</ul>
+				</li>
+				<div class="clear"></div> 
+			</ul>
+		</div>
+		<div id="week" ng-hide="hide_week" class="content" ng-controller="myWeekController" ng-init="">
+			<div class=" monthTitle div_inline">{[{month}]}<img ng-click="showMonthHideWeek()" class='backToYear div_inline' src='/mycalendar_static/images/minus87.png' /></div>
+			<div class="week_head">
+				<button ng-click="previousWeek()" class="button pre div_inline">Previous</button>	
+				<button ng-click="nextWeek()" class="button next div_inline">Next</button>
+				<button ng-click="hideTaskDetail();showNewTask();" class="button newTask div_inline">New Task</button>
+				
+			</div>
+			<ul class="calendar">
+				<li id="header">
+					<ul>
+						<div ng-repeat="day in days">
+							<li>{[{day.dateStart.split(" ")[0]+" "+day.dateStart.split(" ")[1].split("-")[2]}]}</li>
+						</div>
+					</ul>
+				</li>
+				<li class="timemark">
+					<span class="smalltime time0">00:00 </span><span class="smalltime time2">02:00 </span>
+					<span class="smalltime time6">06:00 </span><span class="smalltime time9">09:00 </span>
+					<span class="smalltime time10">10:00 </span><span class="smalltime time11">11:00 </span>
+					<span class="smalltime time12">12:00 </span><span class="smalltime time13">13:00 </span>
+					<span class="smalltime time14">14:00 </span><span class="smalltime time15">15:00 </span>
+					<span class="smalltime time16">16:00 </span><span class="smalltime time17">17:00 </span>
+					<span class="smalltime time18">18:00 </span><span class="smalltime time19">19:00 </span>
+					<span class="smalltime time20">20:00 </span><span class="smalltime time21">21:00 </span>
+					<span class="smalltime time22">22:00 </span><span class="smalltime time23">23:00 </span>
+					<span class="smalltime time24">24:00 </span>
+				</li>
+				<li class="week">
+					<ul>
+						<div ng-controller="myDayController" ng-repeat="day in days">
+							<li>
+								<div ng-repeat="i in [0,47] | makeRange" ng-mouseenter="hover=true;selected(i);" ng-mouseleave="hover=false;clear();" ng-init="small=true;last=!(i-47);pair=!(i%2);hover=false;" ng-mousedown="startSelect();gettimeStart(i);createSelected(i);" ng-mouseup="gettimeEnd(i+1);hideTaskDetail();showNewTask(day,timeStart,timeEnd);cancelSelected(i);" class="ruler" ng-class="{smallruler:small,lastruler:last,mouseover:hover,today:day.today,pairruler:pair}" ng-style="{'height':rulerHeight[i],'background-color':rulerColor[rulerColorIndex[i]]}" ></div>
+								<div class="selected" ng-style="{'height':h+'px','top':t+'px'}"></div>
+								<p class="unselectable taskTitle" ng-style="task.barStyle" ng-repeat="task in day.tasks" ng-click="hideNewTask();showTaskDetail(task);">{[{task.taskTitle}]}</p>
+								
+							</li>
+						</div>
+					</ul>
+				</li>
+				<div class="clear"></div> 
+			</ul>
+		</div>
+		<div id="task" ng-hide="hide_newTask" class="grabbable unselectable content" ng-controller="myTaskController" ng-init="selected=[true,false,false,false,false,false,false,false,false,false,false]" ng-draggable="">
+			<div class="title">Create a New Task<img stop-event="touchstart" ng-click="hideNewTask()" class='close div_inline' src='/mycalendar_static/images/close.png' /></div>
+		    <form class="form-inline" stop-event="touchstart">
+		    	<div class="taskBody">
+			        <div class="form-group block-level">
+			            <input type="text" class="form-control" ng-model="newTask.taskTitle" placeholder="Title">
+			        </div>
+			        <div class="form-group block-level">
+			        	<div ng-repeat="i in [0,10]|makeRange" ng-click="selectcolor(i)" class="taskcolor" ng-style="colors[i]">
+			        		<div ng-class="{colorselected:selected[i]}" class="color-to-select"></div>
+			        	</div>	
+			        </div>
+			        <div class="form-group block-level">
+			            <textarea  rows="5" class="form-control" ng-model="newTask.taskDetail" placeholder="Detail"></textarea>
+			        </div>
+			        <div class="form-group block-level">
+			            <input type="date" class="form-control" ng-model="newTask.dateStart" placeholder="Date">
+			        </div>
+			        <div class="form-group block-level">
+			            <input type="time" class="form-control" ng-model="newTask.timeStart" placeholder="Start Time">
+			        </div>
+			        <div class="form-group block-level">
+			            <input type="time" class="form-control" ng-model="newTask.timeEnd" placeholder="End Time">
+			        </div>
+		    	</div>
+		    </form>
+		    <button class="button" ng-click="saveTask();" stop-event="touchstart">Add Task</button>
+                    <p ng-repeat="(name,errs) in errors" class="alert alert-danger"><strong>{[{ name }]}</strong>: {[{ errs.join(', ') }]}</p>
+		</div>
+		<div id="task" ng-hide="hide_taskDetail" class="grabbable unselectable content" ng-controller="myTaskController" ng-init="selected=[true,false,false,false,false,false,false,false,false,false,false]" ng-draggable="">
+			<div class="title">Task Detail<img stop-event="touchstart" ng-click="hideTaskDetail()" class='close div_inline' src='/mycalendar_static/images/close.png' /></div>
+		    <form class="form-inline" stop-event="touchstart">
+		    	<div class="taskBody">
+			        <div class="form-group block-level">
+			            <input type="text" class="form-control" ng-model="task.taskTitle" placeholder="Title">
+			        </div>
+			        <div class="form-group block-level">
+			        	<div ng-repeat="i in [0,10]|makeRange" ng-click="selectcolor(i,'modify')" class="taskcolor" ng-style="colors[i]">
+			        		<div ng-class="{colorselected:selected[i]}" class="color-to-select"></div>
+			        	</div>	
+			        </div>
+			        <div class="form-group block-level">
+			            <textarea rows="5" class="form-control" ng-model="task.taskDetail" placeholder="Detail"></textarea>
+			        </div>
+			        <div class="form-group block-level">
+			            <input type="date" class="form-control" ng-model="task.dateStart" placeholder="Date">
+			        </div>
+			        <div class="form-group block-level">
+			            <input type="time" class="form-control" ng-model="task.timeStart" placeholder="Start Time">
+			        </div>
+			        <div class="form-group block-level">
+			            <input type="time" class="form-control" ng-model="task.timeEnd" placeholder="End Time">
+			        </div>
+		    	</div>
+		    </form>
+                    <button stop-event="touchstart" class="button" ng-click="saveTaskChange(task);">Save Change</button>
+                    <button stop-event="touchstart" class="button delete" ng-click="deleteTask(task);hideTaskDetail();">Delete</button>
+                    <p ng-repeat="(name,errs) in errors" class="alert alert-danger"><strong>{[{ name }]}</strong>: {[{ errs.join(', ') }]}</p>
+
+		</div> 	 				
+	</div>
+	<div id="hahaha"></div>		
+{% endblock %}
+{% block js %}
+    <script>
+    // Add the CSRF Token  
+    var app = angular.module('myCalendarApp'); // Not including a list of dependent modules (2nd parameter to `module`) "re-opens" the module for additional configuration  
+    var username="{{user.username}}";
+    app.config(['$httpProvider', function($httpProvider) {  
+        $httpProvider.defaults.headers.common['X-CSRFToken'] = '{{ csrf_token|escapejs }}';  
+    }]);  
+    </script> 
+{% endblock %}	

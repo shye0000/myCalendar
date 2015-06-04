@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block content %}
+	<div class="content" ng-controller="myMonthController" ng-init="showCurrent()">
+		<div class=" monthTitle div_inline">{[{month}]} - {[{year}]}</div>
+		<div class="month_head">
+			<button ng-click="previousMonth()" class="button pre div_inline">Previous</button>	
+			<button ng-click="nextMonth()" class="button next div_inline">Next</button>
+		</div>
+		<ol class="calendar">
+			<li id="header">
+				<ul>
+					<li>Sunday</li>
+					<li>Monday</li>
+					<li>Tuesday</li>
+					<li>Wednesday</li>
+					<li>Thursday</li>
+					<li>Friday</li>
+					<li>Saturday</li>
+				</ul>
+			</li>
+			<li id="lastmonth">
+				<ul>
+					<li ng-repeat="i in [ndps,ndpe] | makeRange">{[{i}]}</li>	
+				</ul>
+			</li>
+			<li id="thismonth">
+				<ul>
+					<div ng-repeat="day in days">
+						<li>{[{day.dateStart.split("-")[2]|num}]}<p class="taskTitle" ng-repeat="task in day.tasks">{[{task.taskTitle}]}</p></li>
+					</div>
+				</ul>
+			</li>
+			<li id="nextmonth">
+				<ul>
+					<li ng-repeat="i in [1,ndn] | makeRange">{[{i}]}</li>
+				</ul>
+			</li>
+		</ol>
+	</div>
+{% endblock %}

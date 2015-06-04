@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="content" ng-controller="myWeekController" ng-init="showCurrentWeek()">
+	<div class=" monthTitle div_inline">{[{year}]}</div>
+	<div class="month_head">
+		<button ng-click="previousWeek()" class="button pre div_inline">Previous</button>	
+		<button ng-click="nextWeek()" class="button next div_inline">Next</button>
+	</div>
+	<ol class="calendar">
+		<li id="header">
+			<ul>
+				<div ng-repeat="day in days">
+					<li>{[{day.dateStart}]}</li>
+				</div>
+			</ul>
+		</li>
+		<li class="ruler">
+			<span class="ruler ruler0">00:00 </span>
+			<span class="ruler ruler3">03:00 </span>
+			<span class="ruler ruler6">06:00 </span>
+			<span class="ruler ruler9">09:00 </span>
+			<span class="ruler ruler12">12:00 </span>
+			<span class="ruler ruler15">15:00 </span>
+			<span class="ruler ruler18">18:00 </span>
+			<span class="ruler ruler21">21:00 </span>
+			<span class="ruler ruler24">24:00 </span>
+		</li>
+		<li class="week">
+			<ul>
+				<div ng-repeat="day in days">
+					<li><p class="taskTitle" ng-style="task.barStyle" ng-repeat="task in day.tasks">{[{task.taskTitle}]}</p></li>
+				</div>
+			</ul>
+		</li>
+	</ol>
+</div>		
+{% endblock %}
